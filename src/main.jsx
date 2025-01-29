@@ -5,6 +5,8 @@ import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router";
 import App from "./App.jsx";
 
+import "./custom.scss";
+
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
