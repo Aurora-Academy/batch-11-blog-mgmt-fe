@@ -13,7 +13,7 @@ const CustomButton = memo(
     return (
       <Button variant={variant} disabled={disabled} onClick={() => onClick()}>
         {loading && <Spinner animation="border" variant="light" size="sm" />}
-        &nbsp;{label}
+        &nbsp;<span className="text-white">{label}</span>
       </Button>
     );
   }

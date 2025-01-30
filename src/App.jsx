@@ -18,6 +18,7 @@ const App = () => {
         <Route index element={<Home />} />
         <Route path="/auth">
           <Route index element={<Login />} />
+          <Route path="forget-password" element={<Login />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
         </Route>
