@@ -10,6 +10,7 @@ import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
 import UserEdit from "./pages/admin/users/Edit";
 import UserList from "./pages/admin/users/List";
+import VerifyForgetPassword from "./pages/auth/VerifyForgetPassword";
 
 import { Route, Routes } from "react-router";
 
@@ -21,6 +22,10 @@ const App = () => {
         <Route path="/auth">
           <Route index element={<Login />} />
           <Route path="forget-password" element={<ForgetPassword />} />
+          <Route
+            path="forget-password/verify"
+            element={<VerifyForgetPassword />}
+          />
           <Route path="email-verify" element={<EmailVerification />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
