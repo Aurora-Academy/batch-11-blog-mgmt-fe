@@ -2,7 +2,9 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import AdminLayout from "./layouts/AdminLayout";
 import AppLayout from "./layouts/AppLayout";
 
+import EmailVerification from "./pages/auth/EmailVerification";
 import ErrorPage from "./pages/Error";
+import ForgetPassword from "./pages/auth/ForgetPassword";
 import Home from "./pages/Home";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
@@ -18,7 +20,8 @@ const App = () => {
         <Route index element={<Home />} />
         <Route path="/auth">
           <Route index element={<Login />} />
-          <Route path="forget-password" element={<Login />} />
+          <Route path="forget-password" element={<ForgetPassword />} />
+          <Route path="email-verify" element={<EmailVerification />} />
           <Route path="login" element={<Login />} />
           <Route path="register" element={<Register />} />
         </Route>

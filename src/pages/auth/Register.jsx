@@ -1,4 +1,5 @@
 import { useRef, useState } from "react";
+import { Link, useNavigate } from "react-router";
 import { Button, Form } from "react-bootstrap";
 
 import instance from "../../utils/axios";
@@ -8,6 +9,7 @@ import errorParser from "../../utils/errorParser";
 import AlertBox from "../../components/AlertBox";
 
 const Register = () => {
+  const navigate = useNavigate();
   const registerRef = useRef(null);
   const [isDisabled, setIsDisabled] = useState(false);
   const [msg, setMsg] = useState("");
@@ -27,6 +29,11 @@ const Register = () => {
         },
       });
       setMsg(data.msg);
+      setTimeout(() => {
+        navigate("/auth/email-verify", {
+          state: { email: formData.get("email") },
+        });
+      }, 1000);
     } catch (e) {
       const err = e?.response?.data?.msg || "Something went wrong!";
       setErr(errorParser(err));
@@ -93,12 +100,12 @@ const Register = () => {
               </Form>
               <div className="d-flex justify-content-center">
                 Already have an account?&nbsp;
-                <a
-                  href="/register"
+                <Link
+                  to="/auth/login"
                   className="link-offset-2 link-underline link-underline-opacity-0"
                 >
                   Log in
-                </a>
+                </Link>
               </div>
             </div>
           </div>
