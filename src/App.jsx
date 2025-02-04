@@ -4,6 +4,7 @@ import AdminDashboard from "./pages/admin/Dashboard";
 import AdminLayout from "./layouts/AdminLayout";
 import AppLayout from "./layouts/AppLayout";
 
+import Bookmarks from "./pages/blogs/Bookmarks";
 import Blog from "./pages/blogs/Blog";
 import Blogs from "./pages/blogs/Blogs";
 import BlogList from "./pages/admin/blogs/List";
@@ -23,7 +24,6 @@ const App = () => {
   return (
     <>
       <Routes>
-        <Route index element={<Home />} />
         <Route path="/auth">
           <Route index element={<Login />} />
           <Route path="forget-password" element={<ForgetPassword />} />
@@ -80,6 +80,7 @@ const App = () => {
         </Route>
         <Route path="/" element={<AppLayout />}>
           <Route index element={<Home />} />
+          <Route path="bookmarks" element={<Bookmarks />} />
           <Route path="blogs" element={<Blogs />} />
           <Route path="blogs/:slug" element={<Blog />} />
         </Route>

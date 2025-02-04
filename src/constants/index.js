@@ -9,4 +9,5 @@ export const URLS = {
   REGEN_EMAIL_VERIFICATION: API_URL + "/users/regen-email-verification",
   GENERATE_FORGET_PASSWORD: API_URL + "/users/generate-fp",
   VERIFY_FORGET_PASSWORD: API_URL + "/users/verify-fp",
+  GET_PUBLISHED_BLOGS: API_URL + "/blogs/published",
 };
