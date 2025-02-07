@@ -2,6 +2,8 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { Card, Col, Container, Form, Row } from "react-bootstrap";
 import { BsHeartFill, BsHeart } from "react-icons/bs";
+import { useDispatch, useSelector } from "react-redux";
+import { addBookmark } from "../../slices/bookmarkSlice";
 
 import useDebounce from "../../hooks/useDebounce";
 import instance from "../../utils/axios";
@@ -14,6 +16,8 @@ import SkeletalLoading from "../../components/SkeletalLoading";
 import Paginate from "../../components/Paginate";
 
 const Blogs = () => {
+  const { bookmarks } = useSelector((state) => state.bookmark);
+  const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState("");
   const debounceSearch = useDebounce(searchTerm);
   const [page, setPage] = useState(1);
@@ -31,8 +35,6 @@ const Blogs = () => {
   });
 
   const handleCardClick = () => {};
-
-  const toggleBookmark = () => {};
 
   return (
     <div>
@@ -68,13 +70,10 @@ const Blogs = () => {
                       <div className="d-flex justify-content-between align-items-start">
                         <Card.Title>{post.title}</Card.Title>
                         <div
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            toggleBookmark(post._id);
-                          }}
+                          onClick={() => dispatch(addBookmark(post))}
                           style={{ cursor: "pointer" }}
                         >
-                          {true ? (
+                          {bookmarks.some((item) => item.slug === post.slug) ? (
                             <BsHeartFill color="red" fill="red" size={24} />
                           ) : (
                             <BsHeart size={24} />
@@ -82,7 +81,8 @@ const Blogs = () => {
                         </div>
                       </div>
                       <Card.Text>
-                        {blogDescription({ content: post?.content })}
+                        {post?.content &&
+                          blogDescription({ content: post?.content })}
                       </Card.Text>
                       <div className="d-flex justify-content-between text-muted">
                         <small>{post.author.name}</small>

@@ -1,9 +1,13 @@
 import { Link, useNavigate } from "react-router";
-import { Container, Nav, Navbar, Button } from "react-bootstrap";
+import { Badge, Container, Nav, Navbar, Button } from "react-bootstrap";
 import { BsBookmarks } from "react-icons/bs";
+
+import { useSelector } from "react-redux";
+
 import { getItem } from "../utils/session";
 
 const AppNavbar = () => {
+  const { quantity } = useSelector((state) => state.bookmark);
   const navigate = useNavigate();
   const { name = "" } = JSON.parse(getItem("currentUser"));
   return (
@@ -33,7 +37,8 @@ const AppNavbar = () => {
               className="me-2"
               onClick={() => navigate("/bookmarks")}
             >
-              <BsBookmarks />
+              <BsBookmarks size="1.3em" />
+              <Badge bg="dark">{quantity}</Badge>
             </Button>
             {name ? (
               <Button
