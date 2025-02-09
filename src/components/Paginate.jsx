@@ -36,6 +36,7 @@ const Paginate = ({ currentPage, limit, setPage, setLimit, total }) => {
         <select
           className="form-select form-select-sm"
           style={{ height: "38px" }}
+          value={limit}
           onChange={(e) => {
             setLimit(Number(e.target.value));
             setPage(1);

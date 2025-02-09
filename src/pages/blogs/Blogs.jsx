@@ -21,7 +21,7 @@ const Blogs = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const debounceSearch = useDebounce(searchTerm);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(2);
+  const [limit, setLimit] = useState(10);
 
   const getBlogs = async ({ queryKey }) => {
     const [, { debounceSearch, page, limit }] = queryKey;
@@ -99,7 +99,7 @@ const Blogs = () => {
           {data?.data?.data && data?.data?.data?.data.length > 0 && (
             <Paginate
               currentPage={data.data.data.page}
-              limit={data.data.data.limit}
+              limit={limit}
               total={data.data.data.total}
               setPage={setPage}
               setLimit={setLimit}
