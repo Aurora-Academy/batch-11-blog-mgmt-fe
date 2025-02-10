@@ -13,6 +13,7 @@ import storage from "redux-persist/lib/storage"; // defaults to localStorage for
 
 import autoMergeLevel2 from "redux-persist/lib/stateReconciler/autoMergeLevel2";
 
+import { blogReducer } from "../slices/blogSlice";
 import { bookmarkReducer } from "../slices/bookmarkSlice";
 
 const persistConfig = {
@@ -27,6 +28,7 @@ const persistBookmark = persistReducer(persistConfig, bookmarkReducer);
 export const store = configureStore({
   reducer: {
     bookmark: persistBookmark,
+    blogs: blogReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

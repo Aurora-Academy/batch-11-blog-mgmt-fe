@@ -1,14 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { useQuery } from "@tanstack/react-query";
 import { Card, Col, Container, Form, Row } from "react-bootstrap";
 import { BsHeartFill, BsHeart } from "react-icons/bs";
 import { useDispatch, useSelector } from "react-redux";
-import { addBookmark } from "../../slices/bookmarkSlice";
 
 import useDebounce from "../../hooks/useDebounce";
-import instance from "../../utils/axios";
+import { instance } from "../../utils/axios";
 import { URLS } from "../../constants";
 import { blogDescription } from "../../utils/blogParser";
+import { addBookmark } from "../../slices/bookmarkSlice";
 
 import AlertBox from "../../components/AlertBox";
 import ImageWithFallback from "../../components/ImageWithFallback";
@@ -16,6 +17,7 @@ import SkeletalLoading from "../../components/SkeletalLoading";
 import Paginate from "../../components/Paginate";
 
 const Blogs = () => {
+  const navigate = useNavigate();
   const { bookmarks } = useSelector((state) => state.bookmark);
   const dispatch = useDispatch();
   const [searchTerm, setSearchTerm] = useState("");
@@ -34,7 +36,7 @@ const Blogs = () => {
     queryFn: getBlogs,
   });
 
-  const handleCardClick = () => {};
+  const handleCardClick = (slug) => navigate(`/blogs/${slug}`);
 
   return (
     <div>

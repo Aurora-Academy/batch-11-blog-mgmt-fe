@@ -19,6 +19,7 @@ import Register from "./pages/auth/Register";
 import UserEdit from "./pages/admin/users/Edit";
 import UserList from "./pages/admin/users/List";
 import VerifyForgetPassword from "./pages/auth/VerifyForgetPassword";
+import Profile from "./pages/admin/users/Profile";
 
 const App = () => {
   return (
@@ -57,6 +58,14 @@ const App = () => {
             element={
               <PrivateRoute roles={["admin", "user"]}>
                 <BlogEdit />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="profile"
+            element={
+              <PrivateRoute roles={["admin", "user"]}>
+                <Profile />
               </PrivateRoute>
             }
           />

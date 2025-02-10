@@ -1,10 +1,21 @@
-import { Link, useNavigate } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { Dropdown } from "react-bootstrap";
+
+import { getInitials } from "../utils/textParser";
 import { getItem, removeData } from "../utils/session";
+
+import { AvatarComponent } from "avatar-initials";
 
 const AdminNavbar = () => {
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const { name = "" } = JSON.parse(getItem("currentUser"));
+
+  const navLinks = [
+    { label: "Home", url: "/admin" },
+    { label: "Blogs", url: "/admin/blogs" },
+    { label: "Users", url: "/admin/users" },
+  ];
 
   const handleLogout = () => {
     removeData();
@@ -25,43 +36,34 @@ const AdminNavbar = () => {
           </a>
           <hr />
           <ul className="nav nav-pills flex-column mb-auto">
-            <li className="nav-item">
-              <a href="#" className="nav-link active" aria-current="page">
-                Home
-              </a>
-            </li>
-            <li>
-              <a href="#" className="nav-link link-body-emphasis">
-                Dashboard
-              </a>
-            </li>
-            <li>
-              <a href="#" className="nav-link link-body-emphasis">
-                Orders
-              </a>
-            </li>
-            <li>
-              <a href="#" className="nav-link link-body-emphasis">
-                Products
-              </a>
-            </li>
-            <li>
-              <a href="#" className="nav-link link-body-emphasis">
-                Customers
-              </a>
-            </li>
+            {navLinks.map((link, idx) => (
+              <li key={idx} className="nav-item">
+                <Link
+                  to={link?.url}
+                  className={`nav-link ${
+                    pathname === link.url ? "active" : "link-body-emphasis"
+                  } `}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
           </ul>
           <hr />
           <Dropdown data-bs-theme="light">
             <Dropdown.Toggle variant="outline-secondary">
-              <img
-                src="https://github.com/mdo.png"
-                alt=""
-                width="24"
-                height="24"
-                className="rounded-circle me-2"
+              <AvatarComponent
+                classes="rounded-full"
+                useGravatar={false}
+                size={24}
+                color="#000000"
+                background="#f1f1f1"
+                fontSize={16}
+                fontWeight={400}
+                offsetY={12}
+                initials={getInitials(name)}
               />
-              <strong>{name}</strong>
+              <strong> &nbsp; {name}</strong>
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
