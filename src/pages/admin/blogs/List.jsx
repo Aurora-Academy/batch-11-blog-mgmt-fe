@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { Link } from "react-router";
 import { Form, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import {
   listBlogs,
   createBlog,
   getById,
+  updateStatusBySlug,
   removeBySlug,
   setCurrentPage,
   setLimit,
@@ -16,15 +17,16 @@ import {
 import AlertBox from "../../../components/AlertBox";
 import { TableLoading } from "../../../components/SkeletalLoading";
 import Paginate from "../../../components/Paginate";
+import ToastBox from "../../../components/Toast";
 
 const BlogList = () => {
   const dispatch = useDispatch();
-  const { blogs, currentPage, limit, loading, total } = useSelector(
+  const { blogs, currentPage, error, limit, loading, total } = useSelector(
     (state) => state.blogs
   );
 
   const handleStatusChange = (blog) => {
-    console.log(blog);
+    dispatch(updateStatusBySlug(blog.slug));
   };
 
   const handleCurrentPage = (num) => {
@@ -35,13 +37,24 @@ const BlogList = () => {
     dispatch(setLimit(num));
   };
 
-  useEffect(() => {
+  const handleRemove = (blog) => {
+    dispatch(removeBySlug(blog?.slug));
+  };
+
+  const initFetch = useCallback(() => {
     dispatch(listBlogs({ page: currentPage, limit }));
-  }, [currentPage, limit, dispatch]);
+  }, [dispatch, currentPage, limit]);
+
+  useEffect(() => {
+    initFetch();
+  }, [initFetch]);
 
   return (
     <div>
-      {loading && <TableLoading tableHeaders={["title", "Author", "Status"]} />}
+      {error && <ToastBox msg={error} />}
+      {loading && blogs.length === 0 && (
+        <TableLoading tableHeaders={["title", "Author", "Status"]} />
+      )}
       {!loading && blogs.length === 0 && <AlertBox label="Data not found..." />}
 
       <Table striped>
@@ -55,30 +68,27 @@ const BlogList = () => {
           </tr>
         </thead>
         <tbody>
-          {blogs.map((bm, idx) => (
+          {blogs.map((blog, idx) => (
             <tr key={idx}>
               <td>{idx + 1}</td>
               <td>
                 <Link
-                  to={`/admin/blogs/${bm?._id}`}
+                  to={`/admin/blogs/${blog?._id}`}
                   className="link-offset-2 link-underline link-underline-opacity-0"
                 >
-                  {bm?.title}
+                  {blog?.title}
                 </Link>
               </td>
-              <td>{bm?.author?.name}</td>
+              <td>{blog?.author?.name}</td>
               <td>
                 <Form.Check
                   type="switch"
-                  checked={bm?.status === "published"}
-                  onChange={() => handleStatusChange(bm)}
+                  checked={blog?.status === "published"}
+                  onChange={() => handleStatusChange(blog)}
                 />
               </td>
               <td>
-                <BiTrash
-                  color="red"
-                  // onClick={() => dispatch(removeBySlug(bm?.slug))}
-                />
+                <BiTrash color="red" onClick={() => handleRemove(blog)} />
               </td>
             </tr>
           ))}

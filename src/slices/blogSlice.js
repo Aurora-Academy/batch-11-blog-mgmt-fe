@@ -15,75 +15,118 @@ const initialState = {
 
 export const createBlog = createAsyncThunk(
   "blogs/createBlog",
-  async (payload) => {
-    const res = await instance.post(URLS.BLOGS, payload, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        access_token: getItem(),
-      },
-    });
-    return res.data;
+  async (payload, { rejectWithValue }) => {
+    try {
+      const res = await instance.post(URLS.BLOGS, payload, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          access_token: getItem(),
+        },
+      });
+      return res.data;
+    } catch (e) {
+      return rejectWithValue({
+        data: e?.response?.data?.msg ?? "Something went wrong",
+      });
+    }
   }
 );
 
 export const listBlogs = createAsyncThunk(
   "blogs/listBlogs",
-  async ({ limit, page }) => {
-    const res = await instance.get(
-      `${URLS.BLOGS}?limit=${limit}&page=${page}`,
-      {
-        headers: {
-          access_token: getItem(),
-        },
-      }
-    );
-    return res.data;
+  async ({ limit, page }, { rejectWithValue }) => {
+    try {
+      const res = await instance.get(
+        `${URLS.BLOGS}?limit=${limit}&page=${page}`,
+        {
+          headers: {
+            access_token: getItem(),
+          },
+        }
+      );
+      return res.data;
+    } catch (e) {
+      return rejectWithValue({
+        data: e?.response?.data?.msg ?? "Something went wrong",
+      });
+    }
   }
 );
 
-export const getById = createAsyncThunk("blogs/getById", async (id) => {
-  const res = await instance.get(`${URLS.BLOGS}/admin/${id}`, {
-    headers: {
-      access_token: getItem(),
-    },
-  });
-  return res.data;
-});
+export const getById = createAsyncThunk(
+  "blogs/getById",
+  async (id, { rejectWithValue }) => {
+    try {
+      const res = await instance.get(`${URLS.BLOGS}/admin/${id}`, {
+        headers: {
+          access_token: getItem(),
+        },
+      });
+      return res.data;
+    } catch (e) {
+      return rejectWithValue({
+        data: e?.response?.data?.msg ?? "Something went wrong",
+      });
+    }
+  }
+);
 
 export const updateBySlug = createAsyncThunk(
   "blogs/updateBySlug",
-  async ({ slug, payload }) => {
-    const res = await instance.put(`${URLS.BLOGS}/${slug}`, payload, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        access_token: getItem(),
-      },
-    });
-    return res.data;
+  async ({ slug, payload }, { rejectWithValue }) => {
+    try {
+      const res = await instance.put(`${URLS.BLOGS}/${slug}`, payload, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          access_token: getItem(),
+        },
+      });
+      return res.data;
+    } catch (e) {
+      return rejectWithValue({
+        data: e?.response?.data?.msg ?? "Something went wrong",
+      });
+    }
   }
 );
 
 export const updateStatusBySlug = createAsyncThunk(
   "blogs/updateStatusBySlug",
-  async (slug) => {
-    const res = await instance.patch(`${URLS.BLOGS}/${slug}`, {
-      headers: {
-        access_token: getItem(),
-      },
-    });
-    return res.data;
+  async (slug, { rejectWithValue }) => {
+    try {
+      const res = await instance.patch(
+        `${URLS.BLOGS}/${slug}`,
+        {},
+        {
+          headers: {
+            access_token: getItem(),
+          },
+        }
+      );
+      return res.data;
+    } catch (e) {
+      return rejectWithValue({
+        data: e?.response?.data?.msg ?? "Something went wrong",
+      });
+    }
   }
 );
 
 export const removeBySlug = createAsyncThunk(
   "blogs/removeBySlug",
-  async (slug) => {
-    const res = await instance.delete(`${URLS.BLOGS}/${slug}`, {
-      headers: {
-        access_token: getItem(),
-      },
-    });
-    return res.data;
+  async (slug, { rejectWithValue }) => {
+    try {
+      const res = await instance.delete(`${URLS.BLOGS}/${slug}`, {
+        headers: {
+          access_token: getItem(),
+        },
+      });
+      return res.data;
+    } catch (e) {
+      return rejectWithValue({
+        data: e?.response?.data?.msg ?? "Something went wrong",
+      });
+    }
   }
 );
 
@@ -107,10 +150,11 @@ const blogSlice = createSlice({
       })
       .addCase(createBlog.pending, (state) => {
         state.loading = true;
+        state.error = "";
       })
       .addCase(createBlog.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload.data;
       }) //
       .addCase(listBlogs.fulfilled, (state, action) => {
         state.loading = false;
@@ -119,12 +163,13 @@ const blogSlice = createSlice({
       })
       .addCase(listBlogs.pending, (state) => {
         state.loading = true;
+        state.error = "";
         state.blogs = [];
         state.total = 0;
       })
       .addCase(listBlogs.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload.data;
       }) //
       .addCase(getById.fulfilled, (state, action) => {
         state.loading = false;
@@ -132,10 +177,41 @@ const blogSlice = createSlice({
       })
       .addCase(getById.pending, (state) => {
         state.loading = true;
+        state.error = "";
       })
       .addCase(getById.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload.data;
+      }) //
+      .addCase(updateStatusBySlug.fulfilled, (state, action) => {
+        state.loading = false;
+        const existing = state.blogs.find(
+          (blog) => blog.slug === action.payload.data.slug
+        );
+        existing.status = action.payload.data.status;
+      })
+      .addCase(updateStatusBySlug.pending, (state) => {
+        state.loading = true;
+        state.error = "";
+      })
+      .addCase(updateStatusBySlug.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.data;
+      }) //
+      .addCase(removeBySlug.fulfilled, (state, action) => {
+        state.loading = false;
+        const remaining = state.blogs.filter(
+          (blog) => blog?.slug !== action.meta.arg
+        );
+        state.blogs = remaining;
+      })
+      .addCase(removeBySlug.pending, (state) => {
+        state.loading = true;
+        state.error = "";
+      })
+      .addCase(removeBySlug.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.data;
       });
   },
 });
