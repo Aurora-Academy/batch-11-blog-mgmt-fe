@@ -6,8 +6,6 @@ import { BiTrash } from "react-icons/bi";
 
 import {
   listBlogs,
-  createBlog,
-  getById,
   updateStatusBySlug,
   removeBySlug,
   setCurrentPage,
@@ -56,7 +54,11 @@ const BlogList = () => {
         <TableLoading tableHeaders={["title", "Author", "Status"]} />
       )}
       {!loading && blogs.length === 0 && <AlertBox label="Data not found..." />}
-
+      <div className="d-flex flex-row-reverse">
+        <Link to="/admin/add-blog" className="btn btn-danger">
+          Add
+        </Link>
+      </div>
       <Table striped>
         <thead>
           <tr>

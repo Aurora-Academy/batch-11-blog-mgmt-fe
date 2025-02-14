@@ -13,6 +13,7 @@ const AdminNavbar = () => {
 
   const navLinks = [
     { label: "Home", url: "/admin" },
+    { label: "My Blogs", url: "/admin/my-blogs" },
     { label: "Blogs", url: "/admin/blogs" },
     { label: "Users", url: "/admin/users" },
   ];

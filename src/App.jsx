@@ -7,6 +7,7 @@ import AppLayout from "./layouts/AppLayout";
 import Bookmarks from "./pages/blogs/Bookmarks";
 import Blog from "./pages/blogs/Blog";
 import Blogs from "./pages/blogs/Blogs";
+import AddBlog from "./pages/admin/blogs/Add";
 import BlogList from "./pages/admin/blogs/List";
 import BlogEdit from "./pages/admin/blogs/Edit";
 import EmailVerification from "./pages/auth/EmailVerification";
@@ -14,6 +15,7 @@ import ErrorPage from "./pages/Error";
 import ForgetPassword from "./pages/auth/ForgetPassword";
 import Home from "./pages/Home";
 import Login from "./pages/auth/Login";
+import MyBlogs from "./pages/admin/blogs/MyBlogs";
 import PrivateRoute from "./components/PrivateRoute";
 import Register from "./pages/auth/Register";
 import UserEdit from "./pages/admin/users/Edit";
@@ -42,6 +44,22 @@ const App = () => {
             element={
               <PrivateRoute roles={["admin", "user"]}>
                 <AdminDashboard />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="my-blogs"
+            element={
+              <PrivateRoute roles={["admin", "user"]}>
+                <MyBlogs />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="add-blog"
+            element={
+              <PrivateRoute roles={["admin", "user"]}>
+                <AddBlog />
               </PrivateRoute>
             }
           />

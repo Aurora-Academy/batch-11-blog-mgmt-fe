@@ -147,6 +147,7 @@ const blogSlice = createSlice({
       .addCase(createBlog.fulfilled, (state, action) => {
         state.loading = false;
         state.blog = action.payload.data;
+        // state.blogs.unshift(action.payload.data)
       })
       .addCase(createBlog.pending, (state) => {
         state.loading = true;
@@ -210,6 +211,18 @@ const blogSlice = createSlice({
         state.error = "";
       })
       .addCase(removeBySlug.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.data;
+      }) //
+      .addCase(updateBySlug.fulfilled, (state, action) => {
+        state.loading = false;
+        state.blog = action.payload.data;
+      })
+      .addCase(updateBySlug.pending, (state) => {
+        state.loading = true;
+        state.error = "";
+      })
+      .addCase(updateBySlug.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.data;
       });
