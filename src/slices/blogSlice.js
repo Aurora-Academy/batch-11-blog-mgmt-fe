@@ -71,6 +71,27 @@ export const getById = createAsyncThunk(
   }
 );
 
+export const getMyBlogs = createAsyncThunk(
+  "blogs/getMyBlogs",
+  async ({ limit, page }, { rejectWithValue }) => {
+    try {
+      const res = await instance.get(
+        `${URLS.BLOGS}/my-blogs?limit=${limit}&page=${page}`,
+        {
+          headers: {
+            access_token: getItem(),
+          },
+        }
+      );
+      return res.data;
+    } catch (e) {
+      return rejectWithValue({
+        data: e?.response?.data?.msg ?? "Something went wrong",
+      });
+    }
+  }
+);
+
 export const updateBySlug = createAsyncThunk(
   "blogs/updateBySlug",
   async ({ slug, payload }, { rejectWithValue }) => {
@@ -223,6 +244,21 @@ const blogSlice = createSlice({
         state.error = "";
       })
       .addCase(updateBySlug.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.payload.data;
+      }) //
+      .addCase(getMyBlogs.fulfilled, (state, action) => {
+        state.loading = false;
+        state.total = action.payload.data.total;
+        state.blogs = action.payload.data.data;
+      })
+      .addCase(getMyBlogs.pending, (state) => {
+        state.loading = true;
+        state.error = "";
+        state.blogs = [];
+        state.total = 0;
+      })
+      .addCase(getMyBlogs.rejected, (state, action) => {
         state.loading = false;
         state.error = action.payload.data;
       });

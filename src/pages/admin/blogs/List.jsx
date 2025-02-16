@@ -59,43 +59,45 @@ const BlogList = () => {
           Add
         </Link>
       </div>
-      <Table striped>
-        <thead>
-          <tr>
-            <th>#</th>
-            <th>Title</th>
-            <th>Author</th>
-            <th>Status</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {blogs.map((blog, idx) => (
-            <tr key={idx}>
-              <td>{idx + 1}</td>
-              <td>
-                <Link
-                  to={`/admin/blogs/${blog?._id}`}
-                  className="link-offset-2 link-underline link-underline-opacity-0"
-                >
-                  {blog?.title}
-                </Link>
-              </td>
-              <td>{blog?.author?.name}</td>
-              <td>
-                <Form.Check
-                  type="switch"
-                  checked={blog?.status === "published"}
-                  onChange={() => handleStatusChange(blog)}
-                />
-              </td>
-              <td>
-                <BiTrash color="red" onClick={() => handleRemove(blog)} />
-              </td>
+      {blogs && blogs.length > 0 && (
+        <Table striped>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Title</th>
+              <th>Author</th>
+              <th>Status</th>
+              <th>Actions</th>
             </tr>
-          ))}
-        </tbody>
-      </Table>
+          </thead>
+          <tbody>
+            {blogs.map((blog, idx) => (
+              <tr key={idx}>
+                <td>{idx + 1}</td>
+                <td>
+                  <Link
+                    to={`/admin/blogs/${blog?._id}`}
+                    className="link-offset-2 link-underline link-underline-opacity-0"
+                  >
+                    {blog?.title}
+                  </Link>
+                </td>
+                <td>{blog?.author?.name}</td>
+                <td>
+                  <Form.Check
+                    type="switch"
+                    checked={blog?.status === "published"}
+                    onChange={() => handleStatusChange(blog)}
+                  />
+                </td>
+                <td>
+                  <BiTrash color="red" onClick={() => handleRemove(blog)} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      )}
 
       <div className="d-flex justify-content-center">
         <Paginate
