@@ -3,25 +3,37 @@ import { Dropdown } from "react-bootstrap";
 
 import { getInitials } from "../utils/textParser";
 import { getItem, removeData } from "../utils/session";
+import { getDecodedTokenInfo } from "../utils/routeGuard";
 
 import { AvatarComponent } from "avatar-initials";
+
+const adminRoutes = [
+  { label: "Home", url: "/admin", roles: ["user", "admin"] },
+  { label: "My Blogs", url: "/admin/my-blogs", roles: ["user", "admin"] },
+  { label: "Blogs", url: "/admin/blogs", roles: ["admin"] },
+  { label: "Users", url: "/admin/users", roles: ["admin"] },
+];
+
+const getCurrentUserNavLinks = (links = []) => {
+  const {
+    data: { roles = [] },
+  } = getDecodedTokenInfo();
+  return links.filter((link) =>
+    link?.roles.some((role) => roles.includes(role))
+  );
+};
 
 const AdminNavbar = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const { name = "" } = JSON.parse(getItem("currentUser"));
 
-  const navLinks = [
-    { label: "Home", url: "/admin" },
-    { label: "My Blogs", url: "/admin/my-blogs" },
-    { label: "Blogs", url: "/admin/blogs" },
-    { label: "Users", url: "/admin/users" },
-  ];
-
   const handleLogout = () => {
     removeData();
     navigate("/auth/login");
   };
+
+  const navLinks = getCurrentUserNavLinks(adminRoutes);
   return (
     <>
       <div className="col-auto">

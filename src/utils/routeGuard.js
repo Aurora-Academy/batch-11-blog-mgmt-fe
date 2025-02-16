@@ -21,3 +21,9 @@ export const isValidRole = (sysRoles = []) => {
   const { data: user } = jose.decodeJwt(token);
   return sysRoles.some((r) => user?.roles.includes(r));
 };
+
+export const getDecodedTokenInfo = () => {
+  const token = getToken();
+  if (!token) return false;
+  return jose.decodeJwt(token);
+};
